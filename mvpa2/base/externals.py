@@ -130,12 +130,12 @@ def __check_pywt(features=None):
     """
     import pywt
     import numpy as np
-    data = np.array([ 0.57316901,  0.65292526,  0.75266733,  0.67020084,  0.46505364,
-                     0.76478331,  0.33034164,  0.49165547,  0.32979941,  0.09696717,
-                     0.72552711,  0.4138999 ,  0.54460628,  0.786351  ,  0.50096306,
-                     0.72436454, 0.2193098 , -0.0135051 ,  0.34283984,  0.65596245,
-                     0.49598417,  0.39935064,  0.26370727,  0.05572373,  0.40194438,
-                     0.47004551,  0.60327258,  0.25628266,  0.32964893,  0.24009889,])
+    data = np.array([ 0.57316901, 0.65292526, 0.75266733, 0.67020084, 0.46505364,
+                     0.76478331, 0.33034164, 0.49165547, 0.32979941, 0.09696717,
+                     0.72552711, 0.4138999 , 0.54460628, 0.786351  , 0.50096306,
+                     0.72436454, 0.2193098 , -0.0135051 , 0.34283984, 0.65596245,
+                     0.49598417, 0.39935064, 0.26370727, 0.05572373, 0.40194438,
+                     0.47004551, 0.60327258, 0.25628266, 0.32964893, 0.24009889, ])
     mode = 'per'
     wp = pywt.WaveletPacket(data, 'sym2', mode)
     wp2 = pywt.WaveletPacket(data=None, wavelet='sym2', mode=mode)
@@ -241,7 +241,7 @@ def __check_weave():
     # restore_sys_argv() is apparently is insufficient
     oargv = sys.argv[:]
     ostdout = sys.stdout
-    if not( __debug__ and 'EXT_' in debug.active):
+    if not(__debug__ and 'EXT_' in debug.active):
         from StringIO import StringIO
         sys.stdout = StringIO()
         # *nix specific solution to shut weave up.
@@ -252,12 +252,12 @@ def __check_weave():
         cargs = []
     fmsg = None
     try:
-        data = np.array([1,2,3])
+        data = np.array([1, 2, 3])
         counter = weave.inline("data[0]=fabs(-1);", ['data'],
                                type_converters=converters.blitz,
                                verbose=0,
                                extra_compile_args=cargs,
-                               compiler = 'gcc')
+                               compiler='gcc')
     except Exception, e:
         fmsg = "Failed to build simple weave sample." \
                " Exception was %s" % str(e)
@@ -395,7 +395,7 @@ def __check_pylab_plottable():
         exists('pylab', raise_='always')
         import pylab as pl
         fig = pl.figure()
-        pl.plot([1,2], [1,2])
+        pl.plot([1, 2], [1, 2])
         pl.close(fig)
     except:
         raise RuntimeError, "Cannot plot in pylab"
@@ -472,7 +472,7 @@ def __check_rpy2():
 
     import rpy2.robjects
     r = rpy2.robjects.r
-    r.options(warn=cfg.get_as_dtype('rpy', 'warn', dtype=int, default=-1))
+    r.options(warn=cfg.get_as_dtype('rpy', 'warn', dtype=int, default= -1))
 
     # To shut R up while it is importing libraries to do not ruin out
     # doctests
@@ -581,7 +581,7 @@ def exists(dep, force=False, raise_=False, issueWarning=None):
     # if we are provided with a list of deps - go through all of them
     if isinstance(dep, list) or isinstance(dep, tuple):
         results = [ exists(dep_, force, raise_) for dep_ in dep ]
-        return bool(reduce(lambda x,y: x and y, results, True))
+        return bool(reduce(lambda x, y: x and y, results, True))
 
     # where to look in cfg
     cfgid = 'have ' + dep
