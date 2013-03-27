@@ -199,9 +199,13 @@ class TFCEMeasure(Measure):
         feature2size: dict or np.ndarray
             Mapping from feature index to spatial size measure for each feature.
             If omitted then all sizes are set to unity.
-        nt: int
-            Number of steps in computing TFCE integral.
-            If None then a reasonable value (currently 100) is taken.
+        nt: int or float
+            If a positive int, then the number of steps in computing TFCE 
+            integral. If a positive float, then the step size in computing this 
+            integral. If negative, then a TFCE value is computed only for
+            the threshold value -nt (allowing to to use this class
+            for traditional 'single threshold' clustering). 
+            None is equivalent to 100.
         b: float
             TFCE parameter 'B'.
         e: float
@@ -246,7 +250,7 @@ class TFCEMeasure(Measure):
         tfce_ds: Dataset
             Dataset with computed TFCE values (for each sample separately)
         '''
-        print ds, ds.shape
+
         ns, nf = ds.shape
         neighbors = self._neighbors
         if nf != len(neighbors):
@@ -286,7 +290,10 @@ class TFCEMeasure(Measure):
         if nt < 0:
             ts = [-nt]
         else:
-            dt = ymax / float(nt)
+            if type(nt) is int:
+                dt = ymax / float(nt)
+            else:
+                dt = nt
             # values for t
             ts = np.arange(0, ymax, dt) + dt
 
@@ -297,13 +304,16 @@ class TFCEMeasure(Measure):
 
         # allocate space
         tfce = np.zeros((1, nf))
-        print "starting TFCE"
+
         for t in ts:
             msk = ys >= t
             clusters = find_clusters(msk, neighbors, iso_value=False)
             if not clusters:
                 break
-            print "t=%s, %d clusters" % (t, len(clusters))#, ' '.join('%d' % len(c) for c in clusters))
+
+            if __debug__:
+                debug('TFCE', "t=%s, %d clusters", (t, len(clusters)))
+
             for cluster in clusters:
                 # apply TFCE formula
                 tfce[0, cluster] += np.sum(f2s[cluster]) ** b * t ** e * dt
@@ -403,6 +413,7 @@ class SecondLevelBootstrapPValueTFCEMeasure(TFCEMeasure):
             Expected mean value under null hypothesis
             
         TODO more documentation
+        TODO check one tailed/two tailed
         '''
 
         TFCEMeasure.__init__(self, neighbors=neighbors,
