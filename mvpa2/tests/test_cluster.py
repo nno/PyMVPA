@@ -70,11 +70,18 @@ class ClusterTests(unittest.TestCase):
                 on_edge = any(arr_idxs == 0) or any(arr_idxs == side - 1)
                 assert_equal(on_edge, len(nbrs[i]) < max_nbrs)
 
-        ds.samples = np.mod(ds.samples, side + 1)
+        ds.samples = np.reshape(np.mod(np.arange(side ** 3), side + 1), (1, -1))
 
-        nbrs = cl.dataset_neighbors(ds, space=space, nn=1)
-        clusters = cl.find_clusters(ds, nbrs)
-        # TODO: more tests
+        for nn in xrange(1, 4):
+            nbrs = cl.dataset_neighbors(ds, space=space, nn=nn)
+            clusters = cl.find_clusters(ds, nbrs)
+            for k in xrange(1, side + 1):
+                cluster = clusters.pop(k)
+                n = len(cluster)
+                # 2 clusters if nn=2 - almost everything connected
+                # else each cluster is on its own
+                assert_true(n == 2 if nn > 1 else n > (side - 1) * (side - 2))
+
 
 def suite():
     return unittest.makeSuite(ClusterTests)
