@@ -197,6 +197,9 @@ from mvpa2.misc.bv.base import *
 from mvpa2.misc.support import *
 from mvpa2.misc.transformers import *
 from mvpa2.misc.dcov import dCOV, dcorcoef
+if externals.exists('networkx'):
+    from mvpa2.misc.cluster import louvain_community
+from mvpa2.misc.cluster.neighborhood_clustering import *
 
 __sdebug("nibabel")
 if externals.exists("nibabel"):
