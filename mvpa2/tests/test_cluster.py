@@ -82,6 +82,40 @@ class ClusterTests(unittest.TestCase):
                 # else each cluster is on its own
                 assert_true(n == 2 if nn > 1 else n > (side - 1) * (side - 2))
 
+    def test_tfce_volume(self):
+        if not externals.exists('nibabel'):
+            return
+
+        import nibabel as nb
+        from mvpa2.datasets.mri import fmri_dataset
+
+        side = 4
+        data = np.reshape(np.mod(np.arange(side ** 3), side + 2), (side,) * 3)
+
+        img = nb.Nifti1Image(data, np.eye(4))
+        ds = fmri_dataset(img)
+
+        nn = 3
+        tfce_vals = [(0, 53, 137, 230, 310, 320, 325),
+                     (0., 7.28010989, 20.24159129,
+                            36.94488437, 54.83342819, 61.90449601, 63.49368223)]
+
+
+        for i, (b, e) in enumerate([(1, 1), (.5, 2)]):
+            tfce_measure = cl.mri_dataset_tfce_measure(ds, nn=nn,
+                                                nt=np.max(side) + 1, b=b, e=e)
+            tfce = tfce_measure(ds)
+            assert_equal(tfce.shape, ds.shape)
+
+            assert_array_almost_equal(np.unique(np.asarray(tfce_vals[i])),
+                                      np.unique(tfce.samples.ravel()))
+
+        ds.samples[ds.samples < 1] = 0
+
+        space = 'voxel_indices'
+        nbrs = cl.dataset_neighbors(ds, space=space, nn=nn)
+        clusters = cl.find_clusters(ds, nbrs, iso_value=False)
+
 
 def suite():
     return unittest.makeSuite(ClusterTests)
