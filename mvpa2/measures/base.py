@@ -452,7 +452,7 @@ class CrossValidation(RepeatedMeasure):
             # because it is guaranteed to yield two splits) and is more likely
             # to fail in visible ways if the attribute does not have 0,1,2
             # values at all (i.e. a literal train/test/spareforlater attribute)
-            splitter = Splitter(generator.get_space(), attr_values=(1,2))
+            splitter = Splitter(generator.get_space(), attr_values=(1, 2))
         # transfer measure to wrap the learner
         # splitter used the output space of the generator to know what to split
         tm = TransferMeasure(learner, splitter, postproc=enode)
@@ -615,7 +615,7 @@ class TransferMeasure(Measure):
                     targets=res.sa[measure.get_space()].value,
                     # XXX this should really accept the full dataset
                     predictions=res.samples[:, 0],
-                    estimates = measure.ca.get('estimates', None))
+                    estimates=measure.ca.get('estimates', None))
                 ca.stats = stats
         if ca.is_enabled('training_stats'):
             if measure.ca.has_key("training_stats") \
@@ -828,7 +828,7 @@ class CombinedFeaturewiseMeasure(FeaturewiseMeasure):
     # XXX think again about combiners... now we have it in here and as
     #     well as in the parent -- FeaturewiseMeasure
     # YYY because we don't use parent's _call. Needs RF
-    def __init__(self, analyzers=None,  # XXX should become actually 'measures'
+    def __init__(self, analyzers=None, # XXX should become actually 'measures'
                  sa_attr='combinations',
                  **kwargs):
         """Initialize CombinedFeaturewiseMeasure
@@ -1148,3 +1148,36 @@ class MappedClassifierSensitivityAnalyzer(ProxyClassifierSensitivityAnalyzer):
     def __str__(self):
         return _str(self, str(self.clf))
 
+
+class ChainMeasure(Measure):
+    '''Combines different measures into one'''
+    def __init__(self, measures, null_dist=None, **kwargs):
+        '''Initializes with measures
+        
+        Parameters
+        ----------
+        measures: list
+            a list of measures
+        '''
+        Measure.__init__(self, null_dist=null_dist, **kwargs)
+        self._measures = measures
+
+    def is_trained(self):
+        return all(measure.is_trained for measure in self._measures)
+
+    def _train(self, ds):
+        for measure in self._measures:
+            measure._train(ds)
+
+    def _untrain(self):
+        for measure in self._measures:
+            measure._untrain()
+
+    def _call(self, ds):
+        measures = self._measures
+
+        r = ds
+        for measure in measures:
+            r = measure(r)
+
+        return r
