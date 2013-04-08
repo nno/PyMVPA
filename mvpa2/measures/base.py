@@ -643,7 +643,11 @@ class FeaturewiseMeasure(Measure):
         """Adjusts per-feature-measure for computed `result`
         """
         # This method get the 'result' either as a 1D array, or as a Dataset
-        # everything else is illegal
+        # everything else is illegal.
+
+        # Use a while loop as a surrogate for 'goto' (which is considered harmful).
+        # Either break out of the loop or raise an error. 
+        # (a long if statement with many 'ors would be the alternative)
         while True:
             if not __debug__ or len(result.shape) == 1:
                 break
@@ -1153,35 +1157,3 @@ class MappedClassifierSensitivityAnalyzer(ProxyClassifierSensitivityAnalyzer):
         return _str(self, str(self.clf))
 
 
-class ChainMeasure(Measure):
-    '''Combines different measures into one'''
-    def __init__(self, measures, null_dist=None, **kwargs):
-        '''Initializes with measures
-        
-        Parameters
-        ----------
-        measures: list
-            a list of measures
-        '''
-        Measure.__init__(self, null_dist=null_dist, **kwargs)
-        self._measures = measures
-
-    def is_trained(self):
-        return all(measure.is_trained for measure in self._measures)
-
-    def _train(self, ds):
-        for measure in self._measures:
-            measure._train(ds)
-
-    def _untrain(self):
-        for measure in self._measures:
-            measure._untrain()
-
-    def _call(self, ds):
-        measures = self._measures
-
-        r = ds
-        for measure in measures:
-            r = measure(r)
-
-        return r
