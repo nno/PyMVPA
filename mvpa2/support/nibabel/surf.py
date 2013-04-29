@@ -268,6 +268,10 @@ class Surface(object):
                     nbrs[q][p] = dist
                     nbrs[p][q] = dist
 
+            remaining_nodes = set(xrange(self._nv)) - set(nbrs)
+            for remaining_node in remaining_nodes:
+                nbrs[remaining_node] = dict()
+
             self._nbrs = nbrs
 
         return dict(self._nbrs) # make a copy
