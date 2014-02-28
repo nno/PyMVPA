@@ -426,10 +426,8 @@ def _uniquemerge2literal(attrs):
             return attrs
 
     lunq = len(unq)
-    if lunq > 1:
+    if lunq:
         return ['+'.join([str(l) for l in unq])]
-    elif lunq:
-        return unq
     else:
         return None
 
