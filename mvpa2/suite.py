@@ -265,6 +265,10 @@ if externals.exists('nibabel'):
     from mvpa2.support.nibabel import surf_gifti
 
 
+__sdebug("clustering")
+if externals.exists("networkx"):
+    from mvpa2.misc.cluster import louvain_community
+
 __sdebug("ipython goodies")
 if externals.exists("running ipython env"):
     try:
