@@ -16,7 +16,10 @@ if __debug__:
     from mvpa2.base import debug
     debug('INIT', 'mvpa2.misc.cluster')
 
-from mvpa2.misc.cluster import louvain_community
+from mvpa2.base import externals
+
+if externals.exists('matplotlib'):
+    from mvpa2.misc.cluster import louvain_community
 
 if __debug__:
     debug('INIT', 'mvpa2.misc.cluster end')
