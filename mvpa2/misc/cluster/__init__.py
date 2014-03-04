@@ -18,7 +18,7 @@ if __debug__:
 
 from mvpa2.base import externals
 
-if externals.exists('matplotlib'):
+if externals.exists('networkx'):
     from mvpa2.misc.cluster import louvain_community
 
 if __debug__:
