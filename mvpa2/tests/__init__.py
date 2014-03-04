@@ -243,6 +243,7 @@ def collect_nose_tests(verbosity=1):
         'test_progress',
         'test_winner',
         'test_viz',
+        'test_louvain_community'
         ]
 
     if not cfg.getboolean('tests', 'lowmem', default='no'):
