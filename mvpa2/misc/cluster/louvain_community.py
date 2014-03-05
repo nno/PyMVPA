@@ -69,7 +69,7 @@ def partition_at_level(dendogram, level) :
     >>> dendo = generate_dendogram(G)
     >>> for level in range(len(dendo) - 1) :
     >>>     print "partition at level", level, "is", partition_at_level(
-                                                                dendo, level)
+    >>>                                                          dendo, level)
     """
     partition = dendogram[0].copy()
     for index in range(1, level + 1) :
@@ -254,7 +254,7 @@ def generate_dendogram(graph, part_init=None) :
     >>> dendo = generate_dendogram(G)
     >>> for level in range(len(dendo) - 1) :
     >>>     print "partition at level", level, "is", partition_at_level(
-                                                                dendo, level)
+    >>>                                                         dendo, level)
     """
     if type(graph) != nx.Graph :
         raise TypeError("Bad graph type, use only non directed graph")
