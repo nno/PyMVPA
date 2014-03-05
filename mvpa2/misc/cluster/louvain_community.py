@@ -14,14 +14,15 @@ __author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
 
 # Downloaded 26 Mar 2013 from https://bitbucket.org/taynaud/python-louvain/
 # Copyright (C) 2009 by Thomas Aynaud <thomas.aynaud@lip6.fr>
-# All rights reserved. 
+# All rights reserved.
 # BSD license.
 
 __PASS_MAX = -1
 __MIN = 0.0000001
 
 from mvpa2.base import externals, warning
-externals.exists('networkx', raise_=True)
+if externals.exists('networkx', raise_=True):
+    import networkx as nx
 
 import networkx as nx
 import sys
