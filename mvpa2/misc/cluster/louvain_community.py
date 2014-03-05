@@ -26,7 +26,6 @@ from mvpa2.base import externals, warning
 if externals.exists('networkx', raise_=True):
     import networkx as nx
 
-import networkx as nx
 import sys
 import types
 import array
