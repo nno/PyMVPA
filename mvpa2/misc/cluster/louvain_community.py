@@ -65,6 +65,7 @@ def partition_at_level(dendogram, level) :
 
     Examples
     --------
+    >>> import networkx as nx
     >>> G=nx.erdos_renyi_graph(100, 0.01)
     >>> dendo = generate_dendogram(G)
     >>> for level in range(len(dendo) - 1) :
@@ -110,6 +111,7 @@ def modularity(partition, graph) :
 
     Examples
     --------
+    >>> import networkx as nx    
     >>> G=nx.erdos_renyi_graph(100, 0.01)
     >>> part = best_partition(G)
     >>> modularity(part, G)
@@ -181,6 +183,7 @@ def best_partition(graph, partition=None) :
     Examples
     --------
     >>>  #Basic usage
+    >>> import networkx as nx    
     >>> G=nx.erdos_renyi_graph(100, 0.01)
     >>> part = best_partition(G)
 
@@ -250,6 +253,7 @@ def generate_dendogram(graph, part_init=None) :
 
     Examples
     --------
+    >>> import networkx as nx    
     >>> G=nx.erdos_renyi_graph(100, 0.01)
     >>> dendo = generate_dendogram(G)
     >>> for level in range(len(dendo) - 1) :
@@ -314,6 +318,7 @@ def induced_graph(partition, graph) :
 
     Examples
     --------
+    >>> import networkx as nx    
     >>> n = 5
     >>> g = nx.complete_graph(2*n)
     >>> part = dict([])
@@ -322,8 +327,8 @@ def induced_graph(partition, graph) :
     >>> ind = induced_graph(part, g)
     >>> goal = nx.Graph()
     >>> goal.add_weighted_edges_from([(0,1,n*n),
-                                      (0,0,n*(n-1)/2),
-                                      (1, 1, n*(n-1)/2)])
+    >>>                               (0,0,n*(n-1)/2),
+    >>>                               (1, 1, n*(n-1)/2)])
     >>> nx.is_isomorphic(int, goal)
     True
     """
