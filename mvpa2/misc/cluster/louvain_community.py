@@ -70,7 +70,7 @@ def partition_at_level(dendogram, level) :
     >>> dendo = generate_dendogram(G)
     >>> for level in range(len(dendo) - 1) :
     >>>     print "partition at level", level, "is", partition_at_level(
-    >>>                                                          dendo, level)
+    ...                                                          dendo, level)
     """
     partition = dendogram[0].copy()
     for index in range(1, level + 1) :
@@ -200,7 +200,7 @@ def best_partition(graph, partition=None) :
     >>> for com in set(partition.values()) :
     >>>     count = count + 1.
     >>>     list_nodes = [nodes for nodes in partition.keys()
-    >>>                                 if partition[nodes] == com]
+    ...                                 if partition[nodes] == com]
     >>>     nx.draw_networkx_nodes(G, pos, list_nodes, node_size = 20,
                                     node_color = str(count / size))
     >>> nx.draw_networkx_edges(G,pos, alpha=0.5)
@@ -258,7 +258,7 @@ def generate_dendogram(graph, part_init=None) :
     >>> dendo = generate_dendogram(G)
     >>> for level in range(len(dendo) - 1) :
     >>>     print "partition at level", level, "is", partition_at_level(
-    >>>                                                         dendo, level)
+    ...                                                         dendo, level)
     """
     if type(graph) != nx.Graph :
         raise TypeError("Bad graph type, use only non directed graph")
@@ -327,8 +327,8 @@ def induced_graph(partition, graph) :
     >>> ind = induced_graph(part, g)
     >>> goal = nx.Graph()
     >>> goal.add_weighted_edges_from([(0,1,n*n),
-    >>>                               (0,0,n*(n-1)/2),
-    >>>                               (1, 1, n*(n-1)/2)])
+    ...                               (0,0,n*(n-1)/2),
+    ...                               (1, 1, n*(n-1)/2)])
     >>> nx.is_isomorphic(int, goal)
     True
     """
